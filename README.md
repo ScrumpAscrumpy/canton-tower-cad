@@ -1,7 +1,8 @@
 # 广州塔 / Canton Tower — 参数化 B-Rep 精确模型
 
 **Live demo / 公网浏览：** <https://scrumpascrumpy.github.io/canton-tower-cad/>  
-**Source repository：** <https://github.com/ScrumpAscrumpy/canton-tower-cad>
+**Source repository：** <https://github.com/ScrumpAscrumpy/canton-tower-cad>  
+**Exact CAD downloads：** <https://github.com/ScrumpAscrumpy/canton-tower-cad/releases/tag/v1.0.0>
 
 > 600 m total · 454 m main body · 146 m antenna · 24 CFT columns · 46 ring levels · 37 floors · 45° twist
 
