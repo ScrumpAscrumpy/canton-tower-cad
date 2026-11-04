@@ -20,3 +20,18 @@ web/node_modules/
 # Browser / OS caches
 .chrome*/
 .DS_Store
+
+# Local render test artifacts (not deliverables)
+reports/cdp_*.png
+reports/final_*.png
+reports/render_*.png
+!reports/render_validation_*.png
+reports/standalone_test.png
+reports/site_local.png
+reports/ui_*.png
+reports/preview*.png
+web/proto*
+
+reports/deploy_*.png
+reports/proto*.png
+reports/crop_*.png

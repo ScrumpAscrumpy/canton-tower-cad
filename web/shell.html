@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
-<title>广州塔 · Canton Tower — 参数化 B-Rep 精确模型</title>
-<meta name="description" content="广州塔 600 m 参数化 B-Rep 模型：STEP AP214、GLB 网格化、Three.js 交互查看器。24 根 CFT 柱、46 道环梁、37 层楼板、45° 扭转。" />
+<title>广州塔 · Canton Tower — 参数化 B-Rep 精确模型 / WebGPU 渲染</title>
+<meta name="description" content="广州塔 600 m 参数化 B-Rep 模型：STEP AP214、GLB 网格化，Three.js WebGPU/WebGL2 双后端查看器；L0/L1/L2 真实质感分级、HDR IBL、PCF 阴影、AO/Bloom/DoF。" />
 <style>
 __CSS__
 </style>
@@ -21,9 +21,10 @@ __CSS__
     </div>
   </div>
   <div class="topbadges">
+    <div class="badge backend-badge" id="backend-badge"><span class="backend-dot" id="backend-dot"></span><b id="backend-badge-label">BACKEND ?</b></div>
+    <div class="badge"><span id="fps-badge">-- FPS</span> · <b id="level-badge">L1</b></div>
     <div class="badge">STEP <b>AP214</b> · mm</div>
     <div class="badge">B-REP <b>1,899</b> SOLIDS</div>
-    <div class="badge">WEB LOD <b>30 mm</b> / 0.45 rad</div>
   </div>
 </header>
 
@@ -55,46 +56,108 @@ __CSS__
   <div class="note"><b>精度声明</b> 几何为 1:1 mm 参数化 B-Rep；Web GLB 为 30 mm LOD 渲染派生。B 类构件尺寸为工程假设，完整来源与风险见参数表。</div>
 </aside>
 
-<aside class="panel controls" aria-label="视图控制">
-  <div class="control-title">VIEW / 视角</div>
-  <div class="view-grid">
-    <button class="view-btn is-active" data-view="full">全景 <small>OVERVIEW</small></button>
-    <button class="view-btn" data-view="waist">塔腰 <small>WAIST</small></button>
-    <button class="view-btn" data-view="crown">塔冠 <small>CROWN</small></button>
-    <button class="view-btn" data-view="antenna">天线 <small>ANTENNA</small></button>
-    <button class="view-btn" data-view="base">基座 <small>PODIUM</small></button>
-    <button class="view-btn" id="reset">重置 <small>RESET · R</small></button>
+<aside class="panel controls" aria-label="渲染与视图控制">
+  <div class="control-tabs" role="tablist" aria-label="控制面板">
+    <button class="control-tab is-active" data-tab="render" role="tab" aria-selected="true">RENDER <span>渲染</span></button>
+    <button class="control-tab" data-tab="view" role="tab" aria-selected="false">VIEW <span>视图</span></button>
   </div>
 
-  <div class="control-title">LAYERS / 图层</div>
-  <div class="layer-list">
-    <button class="layer" data-layer="lattice"><span class="dot"></span>外筒网格 <span class="state">ON</span></button>
-    <button class="layer" data-layer="core"><span class="dot"></span>核心筒 <span class="state">ON</span></button>
-    <button class="layer" data-layer="floors"><span class="dot"></span>楼板 <span class="state">ON</span></button>
-    <button class="layer" data-layer="crown"><span class="dot"></span>观景环 <span class="state">ON</span></button>
-    <button class="layer" data-layer="antenna"><span class="dot"></span>天线桅杆 <span class="state">ON</span></button>
-    <button class="layer" data-layer="podium"><span class="dot"></span>基座 <span class="state">ON</span></button>
-  </div>
-
-  <div class="switch-row">
-    <span>自动旋转</span>
-    <button id="autorotate" class="switch on" aria-pressed="true" aria-label="自动旋转"></button>
-  </div>
-
-  <div class="section-wrap" id="section-wrap">
-    <div class="section-head">
-      <span class="section-name">剖切 / SECTION</span>
-      <button id="section-toggle" class="switch" aria-pressed="false" aria-label="剖切"></button>
+  <div class="tab-panel" id="tab-render">
+    <div class="backend-card">
+      <div class="backend-line">
+        <span class="backend-led" id="backend-led"></span>
+        <b id="backend-name">检测中…</b>
+        <span class="backend-tag" id="backend-tag">INIT</span>
+      </div>
+      <div class="backend-meta" id="backend-meta">检测 navigator.gpu → WebGPU → WebGL2</div>
     </div>
-    <input id="section-range" class="section-slider" type="range" min="-30" max="30" step="1" value="0" />
-    <div class="section-value" id="section-value">+0 m · X normal</div>
-    <div class="section-note">开启后沿 X 轴剖切，查看核心筒、楼板与外筒的连接关系。</div>
+
+    <div class="control-title">REALISM / 真实质感</div>
+    <div class="segmented" id="level-seg" role="group" aria-label="真实质感等级">
+      <button data-level="L0" aria-pressed="false">L0<small>基础</small></button>
+      <button data-level="L1" class="is-active" aria-pressed="true">L1<small>增强</small></button>
+      <button data-level="L2" aria-pressed="false">L2<small>电影</small></button>
+    </div>
+    <div class="level-note" id="level-note">L1 增强：HDR IBL · PCF 软阴影 · GTAO + Bloom · ACES</div>
+
+    <div class="switch-list">
+      <div class="switch-row">
+        <div class="switch-copy"><span>IBL 环境</span><small>HDR equirect · TSL</small></div>
+        <button class="switch on" id="sw-ibl" aria-pressed="true" aria-label="IBL 环境"></button>
+      </div>
+      <div class="switch-row">
+        <div class="switch-copy"><span>实时阴影</span><small>PCFSoft + 接触阴影</small></div>
+        <button class="switch on" id="sw-shadows" aria-pressed="true" aria-label="实时阴影"></button>
+      </div>
+      <div class="switch-row">
+        <div class="switch-copy"><span>后处理</span><small>AO / Bloom / FXAA</small></div>
+        <button class="switch on" id="sw-post" aria-pressed="true" aria-label="后处理"></button>
+      </div>
+      <div class="switch-row is-disabled" id="ssr-row" title="跨后端管线以 DoF 替代 SSR；避免 WebGL2 直接崩溃">
+        <div class="switch-copy"><span>SSR 反射</span><small>可选 · 本版以 DoF 替代</small></div>
+        <button class="switch" id="sw-ssr" aria-pressed="false" aria-label="SSR 反射（不可用）" disabled></button>
+      </div>
+      <div class="switch-row">
+        <div class="switch-copy"><span>自动降级</span><small>FPS 预算保护</small></div>
+        <button class="switch on" id="sw-auto" aria-pressed="true" aria-label="自动降级"></button>
+      </div>
+    </div>
+
+    <div class="perf-card" aria-label="性能状态">
+      <div><span>FPS</span><b id="perf-fps">–</b></div>
+      <div><span>PIXEL RATIO</span><b id="perf-dpr">–</b></div>
+      <div><span>SHADOW</span><b id="perf-shadow">–</b></div>
+      <div><span>POST PASSES</span><b id="perf-passes">–</b></div>
+    </div>
+
+    <div class="budget-line">BUDGET · 50 FPS target · 30 FPS floor · 3 s sustain · ≤4 post passes</div>
+    <div class="quality-warning" id="quality-warning" hidden></div>
+    <div class="render-note" id="render-note">WebGPU 是渲染后端，不是真实感开关。真实感由材质、IBL、阴影、后处理与色彩管理决定。</div>
   </div>
 
-  <div class="keyhint"><b>R</b> 重置 · <b>X</b> 剖切 · <b>SPACE</b> 旋转<br />拖拽旋转 · 滚轮缩放 · 右键平移</div>
+  <div class="tab-panel is-hidden" id="tab-view">
+    <div class="control-title">VIEW / 视角</div>
+    <div class="view-grid">
+      <button class="view-btn is-active" data-view="full">全景 <small>OVERVIEW</small></button>
+      <button class="view-btn" data-view="waist">塔腰 <small>WAIST</small></button>
+      <button class="view-btn" data-view="crown">塔冠 <small>CROWN</small></button>
+      <button class="view-btn" data-view="antenna">天线 <small>ANTENNA</small></button>
+      <button class="view-btn" data-view="base">基座 <small>PODIUM</small></button>
+      <button class="view-btn" id="reset">重置 <small>RESET · R</small></button>
+    </div>
+
+    <div class="control-title">LAYERS / 图层</div>
+    <div class="layer-list">
+      <button class="layer" data-layer="lattice"><span class="dot"></span>外筒网格 <span class="state">ON</span></button>
+      <button class="layer" data-layer="core"><span class="dot"></span>核心筒 <span class="state">ON</span></button>
+      <button class="layer" data-layer="floors"><span class="dot"></span>楼板 <span class="state">ON</span></button>
+      <button class="layer" data-layer="crown"><span class="dot"></span>观景环 <span class="state">ON</span></button>
+      <button class="layer" data-layer="antenna"><span class="dot"></span>天线桅杆 <span class="state">ON</span></button>
+      <button class="layer" data-layer="podium"><span class="dot"></span>基座 <span class="state">ON</span></button>
+    </div>
+
+    <div class="switch-row">
+      <div class="switch-copy"><span>自动旋转</span><small>ORBIT</small></div>
+      <button id="autorotate" class="switch on" aria-pressed="true" aria-label="自动旋转"></button>
+    </div>
+
+    <div class="section-wrap" id="section-wrap">
+      <div class="section-head">
+        <span class="section-name">剖切 / SECTION</span>
+        <button id="section-toggle" class="switch" aria-pressed="false" aria-label="剖切"></button>
+      </div>
+      <input id="section-range" class="section-slider" type="range" min="-30" max="30" step="1" value="0" />
+      <div class="section-value" id="section-value">+0 m · X normal</div>
+      <div class="section-note">开启后沿 X 轴剖切，查看核心筒、楼板与外筒的连接关系。</div>
+    </div>
+
+    <div class="keyhint"><b>R</b> 重置 · <b>X</b> 剖切 · <b>SPACE</b> 旋转<br />拖拽旋转 · 滚轮缩放 · 右键平移</div>
+  </div>
 </aside>
 
 <div class="hint">CANTON TOWER / PARAMETRIC CAD STUDY / 2026</div>
+<div class="perf-chip" id="perf-chip"><span class="chip-led"></span><b id="chip-fps">–</b> FPS · <span id="chip-level">L1</span> · <span id="chip-backend">…</span></div>
+<div id="toast" role="status" aria-live="polite"></div>
 <a class="report-link" href="__REPORT_LINK__">VALIDATION REPORT ↗</a>
 
 <div id="loading">
@@ -102,14 +165,31 @@ __CSS__
     <div class="load-ring"></div>
     <div class="load-kicker">ASSEMBLING B-REP / 1,899 SOLIDS</div>
     <div class="load-title">正在装配广州塔</div>
-    <p>24 根 CFT 柱 · 46 道环梁 · 540 根斜撑<br />STEP 精确几何 → GLB 网格化</p>
+    <p id="load-detail">初始化渲染后端 · 检测 WebGPU / WebGL2</p>
     <div class="load-bar"><i></i></div>
   </div>
 </div>
 
 <script id="glb-b64" type="text/plain">__GLB_BASE64__</script>
 <script>
-__BUNDLE__
+window.__BOOT_ERR__ = null;
+window.addEventListener('error', (e) => {
+  window.__BOOT_ERR__ = (e.error && (e.error.stack || e.error.message)) || e.message || 'script error';
+  const el = document.getElementById('load-detail');
+  if (el) el.textContent = 'ERROR: ' + window.__BOOT_ERR__;
+  console.error('BOOT ERROR', window.__BOOT_ERR__);
+});
+window.addEventListener('unhandledrejection', (e) => {
+  const r = e.reason;
+  window.__BOOT_ERR__ = (r && (r.stack || r.message)) || String(r);
+  const el = document.getElementById('load-detail');
+  if (el) el.textContent = 'ERROR: ' + window.__BOOT_ERR__;
+  console.error('BOOT REJECTION', window.__BOOT_ERR__);
+});
 </script>
+<script>
+__BOOTSTRAP__
+</script>
+__BUNDLE_TAG__
 </body>
 </html>
