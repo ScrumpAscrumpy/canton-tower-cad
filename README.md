@@ -4,6 +4,8 @@
 **Source repository：** <https://github.com/ScrumpAscrumpy/canton-tower-cad>  
 **Exact CAD downloads：** <https://github.com/ScrumpAscrumpy/canton-tower-cad/releases/tag/v1.0.0>
 
+![Canton Tower B-Rep viewer](reports/screenshot.png)
+
 > 600 m total · 454 m main body · 146 m antenna · 24 CFT columns · 46 ring levels · 37 floors · 45° twist
 
 本目录交付一个可复现的 Python 无头 CAD 管线：由 `cad/params.py` 驱动 CadQuery 2.5.2 / OCCT 7.7.2 构建 1:1 mm B-Rep 装配体，导出 STEP AP214，按绝对线性偏差网格化为两个 GLB LOD，并由一个只加载 GLB 的 Three.js 查看器渲染。查看器不生成任何精确塔体几何。
