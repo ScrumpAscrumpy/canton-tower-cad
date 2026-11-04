@@ -1,0 +1,15 @@
+{
+  "name": "canton-tower-viewer-build",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Pinned Three.js viewer build for the Canton Tower model",
+  "type": "commonjs",
+  "scripts": {
+    "build:viewer": "esbuild ../web/app.js --bundle --minify --format=iife --target=es2020 --outfile=../web/bundle.js",
+    "generate:pages": "python3 ../web/build_pages.py"
+  },
+  "dependencies": {
+    "three": "0.169.0",
+    "esbuild": "0.24.0"
+  }
+}

@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+<title>广州塔 · Canton Tower — 参数化 B-Rep 精确模型</title>
+<meta name="description" content="广州塔 600 m 参数化 B-Rep 模型：STEP AP214、GLB 网格化、Three.js 交互查看器。24 根 CFT 柱、46 道环梁、37 层楼板、45° 扭转。" />
+<style>
+:root{
+  --bg:#04090e;
+  --bg2:#07121a;
+  --ink:#e9f4fb;
+  --muted:#8198a8;
+  --faint:#526877;
+  --line:rgba(148,204,235,.15);
+  --line-strong:rgba(158,219,255,.30);
+  --ice:#9bdcff;
+  --ice-dim:#5e9ebf;
+  --gold:#f3bf78;
+  --panel:rgba(5,13,20,.70);
+  --panel-2:rgba(8,20,30,.52);
+  --shadow:0 30px 80px rgba(0,0,0,.45);
+  --mono:"SFMono-Regular",Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:"Helvetica Neue","PingFang SC","Hiragino Sans GB","Noto Sans SC",Arial,sans-serif;
+  --serif:"Songti SC","STSong","Noto Serif SC",Georgia,serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;color:var(--ink);font-family:var(--sans);background:
+    radial-gradient(1100px 760px at 73% 10%,rgba(31,99,142,.20),transparent 62%),
+    radial-gradient(900px 620px at 12% 88%,rgba(9,53,82,.18),transparent 66%),
+    linear-gradient(180deg,#050c12 0%,#03070b 100%);
+  overflow:hidden;-webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    linear-gradient(90deg,rgba(255,255,255,.022) 1px,transparent 1px),
+    linear-gradient(0deg,rgba(255,255,255,.016) 1px,transparent 1px);
+  background-size:120px 120px;
+  mask-image:radial-gradient(ellipse at 50% 40%,black 0%,transparent 78%);
+}
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+}
+#stage{position:fixed;inset:0;z-index:1}
+#stage canvas{display:block;width:100%;height:100%;outline:none}
+
+/* ---------- top bar ---------- */
+.topbar{
+  position:fixed;z-index:10;top:0;left:0;right:0;display:flex;align-items:center;
+  justify-content:space-between;padding:22px 28px;pointer-events:none;
+}
+.brand{display:flex;align-items:center;gap:14px;pointer-events:auto}
+.brand-mark{
+  width:34px;height:34px;border:1px solid var(--line-strong);border-radius:50%;
+  display:grid;place-items:center;position:relative;
+}
+.brand-mark::before,.brand-mark::after{content:"";position:absolute;background:var(--ice);opacity:.8}
+.brand-mark::before{width:1px;height:46px;transform:rotate(18deg)}
+.brand-mark::after{width:46px;height:1px;transform:rotate(-18deg);opacity:.35}
+.brand-name{line-height:1.05}
+.brand-name b{display:block;font-size:14px;letter-spacing:.24em;font-weight:600}
+.brand-name span{display:block;margin-top:5px;font-family:var(--mono);font-size:9px;letter-spacing:.28em;color:var(--faint)}
+.topbadges{display:flex;gap:8px;pointer-events:auto}
+.badge{
+  font-family:var(--mono);font-size:9px;letter-spacing:.18em;color:var(--muted);
+  border:1px solid var(--line);background:rgba(5,13,20,.55);padding:8px 11px;border-radius:999px;
+  backdrop-filter:blur(12px);
+}
+.badge b{color:var(--ice);font-weight:500}
+
+/* ---------- shared panel ---------- */
+.panel{
+  position:fixed;z-index:8;background:linear-gradient(160deg,var(--panel),rgba(5,12,18,.54));
+  border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(22px) saturate(120%);
+}
+.eyebrow{
+  font-family:var(--mono);font-size:9px;letter-spacing:.26em;color:var(--ice-dim);
+  display:flex;align-items:center;gap:9px;text-transform:uppercase;
+}
+.eyebrow::before{content:"";width:22px;height:1px;background:var(--ice-dim);opacity:.7}
+
+/* ---------- left dossier ---------- */
+.dossier{
+  left:28px;top:92px;width:324px;max-height:calc(100vh - 130px);overflow:auto;
+  border-radius:2px;padding:26px 26px 22px;
+  scrollbar-width:none;
+}
+.dossier::-webkit-scrollbar{display:none}
+.title-cn{
+  margin:18px 0 4px;font-family:var(--serif);font-size:64px;line-height:.9;font-weight:400;
+  letter-spacing:.02em;
+}
+.title-en{
+  font-family:var(--mono);font-size:9px;letter-spacing:.40em;color:var(--faint);
+  margin:9px 0 18px;
+}
+.lede{font-size:12px;line-height:1.85;color:var(--muted);margin:0 0 20px;max-width:255px}
+.hero-height{display:flex;align-items:baseline;gap:10px;border-top:1px solid var(--line);padding-top:17px}
+.hero-height b{font-size:52px;line-height:.9;font-weight:300;letter-spacing:-.04em;color:#fff}
+.hero-height span{font-family:var(--mono);font-size:10px;letter-spacing:.22em;color:var(--faint)}
+.hero-sub{font-size:10px;color:var(--faint);letter-spacing:.12em;margin-top:7px}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:22px;border-top:1px solid var(--line)}
+.stat{padding:13px 0 12px;border-bottom:1px solid var(--line)}
+.stat:nth-child(odd){border-right:1px solid var(--line);padding-right:14px}
+.stat:nth-child(even){padding-left:14px}
+.stat b{display:block;font-size:19px;font-weight:400;color:#fff;letter-spacing:-.01em}
+.stat span{display:block;margin-top:4px;font-family:var(--mono);font-size:8px;letter-spacing:.18em;color:var(--faint);text-transform:uppercase}
+.spec{margin-top:18px;display:grid;gap:8px}
+.spec-row{display:flex;justify-content:space-between;gap:10px;font-size:10px;color:var(--muted)}
+.spec-row span:first-child{color:var(--faint);letter-spacing:.06em}
+.spec-row span:last-child{font-family:var(--mono);font-size:9px;color:#c9dbe7;text-align:right}
+.note{
+  margin-top:20px;padding:11px 12px;border-left:1px solid var(--gold);
+  font-size:9.5px;line-height:1.75;color:#a9b8c3;background:rgba(243,191,120,.035);
+}
+.note b{color:var(--gold);font-weight:500}
+
+/* ---------- right controls ---------- */
+.controls{
+  right:28px;top:92px;width:246px;border-radius:2px;padding:20px 20px 18px;
+  max-height:calc(100vh - 130px);overflow:auto;scrollbar-width:none;
+}
+.controls::-webkit-scrollbar{display:none}
+.control-title{font-family:var(--mono);font-size:9px;letter-spacing:.24em;color:var(--ice-dim);margin:0 0 11px}
+.view-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:20px}
+.view-btn{
+  appearance:none;border:1px solid var(--line);background:rgba(255,255,255,.025);color:#ccdce7;
+  padding:9px 8px;border-radius:1px;font-family:var(--sans);font-size:10px;letter-spacing:.08em;
+  cursor:pointer;transition:.2s ease;text-align:left;
+}
+.view-btn small{display:block;margin-top:2px;font-family:var(--mono);font-size:7px;letter-spacing:.14em;color:var(--faint)}
+.view-btn:hover{border-color:var(--line-strong);background:rgba(122,195,235,.08)}
+.view-btn.is-active{border-color:var(--ice);color:#fff;background:rgba(116,194,235,.12)}
+.view-btn.is-active small{color:var(--ice-dim)}
+
+.layer-list{display:grid;gap:2px;margin-bottom:20px}
+.layer{
+  appearance:none;background:none;border:0;border-bottom:1px solid rgba(148,204,235,.08);
+  display:flex;align-items:center;gap:10px;padding:9px 2px;color:#cbdae5;cursor:pointer;
+  font-family:var(--sans);font-size:10.5px;letter-spacing:.06em;text-align:left;transition:.2s;
+}
+.layer:hover{color:#fff}
+.layer .dot{width:6px;height:6px;border-radius:50%;background:var(--ice);box-shadow:0 0 10px currentColor;flex:0 0 auto}
+.layer[data-layer="core"] .dot{background:#d8d2c4}
+.layer[data-layer="floors"] .dot{background:#5d9bb8}
+.layer[data-layer="crown"] .dot{background:#7ac5dc}
+.layer[data-layer="antenna"] .dot{background:#f0f4f7}
+.layer[data-layer="podium"] .dot{background:#8d979f}
+.layer .state{margin-left:auto;font-family:var(--mono);font-size:8px;color:var(--ice);opacity:.8}
+.layer.is-off{opacity:.40}
+.layer.is-off .dot{background:#3e5260;box-shadow:none}
+.layer.is-off .state{color:var(--faint)}
+
+.switch-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 2px;border-top:1px solid var(--line);font-size:10.5px;color:#cbdae5;letter-spacing:.05em}
+.switch{
+  width:31px;height:16px;border:1px solid rgba(160,215,245,.35);border-radius:999px;position:relative;
+  background:rgba(255,255,255,.04);transition:.25s;flex:0 0 auto;cursor:pointer;
+}
+.switch::after{content:"";position:absolute;width:10px;height:10px;border-radius:50%;background:#738b9b;top:2px;left:2px;transition:.25s}
+.switch.on{border-color:var(--ice);background:rgba(126,201,241,.16)}
+.switch.on::after{left:17px;background:var(--ice);box-shadow:0 0 12px rgba(155,220,255,.7)}
+
+.section-wrap{padding:13px 2px 3px;border-top:1px solid var(--line);transition:.25s}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.section-name{font-size:10.5px;color:#cbdae5;letter-spacing:.05em}
+.section-value{font-family:var(--mono);font-size:8px;color:var(--faint)}
+.section-slider{width:100%;margin:12px 0 2px;accent-color:#8fd7ff;opacity:.35;transition:.25s}
+.section-wrap.is-active .section-slider{opacity:1}
+.section-note{font-size:8px;color:var(--faint);letter-spacing:.06em;line-height:1.6}
+.section-wrap:not(.is-active) .section-slider{pointer-events:none}
+
+.keyhint{margin-top:18px;border-top:1px solid var(--line);padding-top:12px;font-family:var(--mono);font-size:7.5px;line-height:1.9;letter-spacing:.10em;color:var(--faint)}
+.keyhint b{color:#a9c0ce;font-weight:500}
+
+/* ---------- footer / loading ---------- */
+.hint{
+  position:fixed;left:28px;bottom:20px;z-index:9;font-family:var(--mono);font-size:8px;
+  letter-spacing:.16em;color:var(--faint);pointer-events:none;
+}
+.report-link{
+  position:fixed;right:28px;bottom:20px;z-index:9;font-family:var(--mono);font-size:8px;
+  letter-spacing:.14em;color:var(--ice-dim);text-decoration:none;border-bottom:1px solid rgba(155,220,255,.25);
+}
+.report-link:hover{color:#fff;border-color:#fff}
+
+#loading{
+  position:fixed;inset:0;z-index:100;display:grid;place-items:center;
+  background:radial-gradient(900px 700px at 50% 45%,#07141d 0%,#03070b 70%);
+  transition:opacity .7s ease,visibility .7s;
+}
+#loading.is-done{opacity:0;visibility:hidden;pointer-events:none}
+.load-card{width:min(460px,calc(100vw - 60px));text-align:center}
+.load-ring{width:58px;height:58px;margin:0 auto 26px;border:1px solid rgba(155,220,255,.14);border-radius:50%;position:relative}
+.load-ring::before,.load-ring::after{content:"";position:absolute;inset:-1px;border-radius:50%;border:1px solid transparent}
+.load-ring::before{border-top-color:var(--ice);animation:spin 1.2s linear infinite}
+.load-ring::after{inset:9px;border-bottom-color:rgba(243,191,120,.7);animation:spin 1.9s linear infinite reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+.load-kicker{font-family:var(--mono);font-size:8px;letter-spacing:.30em;color:var(--ice-dim);margin-bottom:14px}
+.load-title{font-family:var(--serif);font-size:34px;letter-spacing:.04em;font-weight:400}
+.load-card p{font-size:10px;line-height:1.8;color:var(--muted);letter-spacing:.05em}
+.load-bar{height:1px;background:rgba(155,220,255,.14);margin:25px auto 0;width:220px;overflow:hidden}
+.load-bar i{display:block;height:100%;width:45%;background:linear-gradient(90deg,transparent,var(--ice),transparent);animation:sweep 1.4s ease-in-out infinite}
+@keyframes sweep{0%{transform:translateX(-120%)}100%{transform:translateX(260%)}}
+
+/* ---------- responsive ---------- */
+@media (max-width:1100px){
+  .dossier{width:286px}
+  .title-cn{font-size:54px}
+  .controls{width:222px}
+}
+@media (max-width:860px){
+  .topbar{padding:16px 16px}
+  .topbadges{display:none}
+  .brand-name b{font-size:12px}
+  .dossier{
+    left:12px;right:12px;top:auto;bottom:48px;width:auto;max-height:36vh;
+    padding:18px 18px 14px;
+  }
+  .title-cn{font-size:38px;margin-top:12px}
+  .lede{display:none}
+  .hero-height b{font-size:36px}
+  .stat-grid{margin-top:14px}
+  .spec,.note{display:none}
+  .controls{
+    right:12px;top:70px;width:206px;max-height:calc(100vh - 150px);padding:14px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .section-note{display:none}
+  .view-grid{margin-bottom:12px}
+  .view-btn{padding:7px 6px;font-size:9px}
+  .view-btn small{display:none}
+  .layer{padding:7px 0;font-size:9.5px}
+  .keyhint{display:none}
+  .hint{display:none}
+  .report-link{right:12px;bottom:16px}
+}
+@media (max-width:560px){
+  .controls{width:174px;top:62px}
+  .dossier{max-height:30vh}
+  .stat:nth-child(3),.stat:nth-child(4){display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.001ms !important;transition-duration:.001ms !important}
+}
+
+</style>
+</head>
+<body>
+<div id="stage" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark" aria-hidden="true"></div>
+    <div class="brand-name">
+      <b>广州塔 · CANTON TOWER</b>
+      <span>PARAMETRIC B-REP / GEOMETRY STUDY</span>
+    </div>
+  </div>
+  <div class="topbadges">
+    <div class="badge">STEP <b>AP214</b> · mm</div>
+    <div class="badge">B-REP <b>1,899</b> SOLIDS</div>
+    <div class="badge">WEB LOD <b>30 mm</b> / 0.45 rad</div>
+  </div>
+</header>
+
+<aside class="panel dossier" aria-label="项目数据">
+  <div class="eyebrow">Guangzhou · Haizhu · 23.106°N 113.324°E</div>
+  <h1 class="title-cn">小蛮腰</h1>
+  <div class="title-en">CANTON TOWER / 广州塔</div>
+  <p class="lede">由两个相对旋转 45° 的椭圆定义的广义双曲面。24 根钢管混凝土柱、46 道环梁与交替斜撑编织出 600 m 的扭转网格。</p>
+
+  <div class="hero-height"><b>600</b><span>m / TOTAL HEIGHT</span></div>
+  <div class="hero-sub">主塔体 454 m + 天线桅杆 146 m</div>
+
+  <div class="stat-grid">
+    <div class="stat"><b>454 <small style="font-size:10px;color:#7f97a8">m</small></b><span>Main body</span></div>
+    <div class="stat"><b>146 <small style="font-size:10px;color:#7f97a8">m</small></b><span>Antenna</span></div>
+    <div class="stat"><b>45°</b><span>Twist / crown vs base</span></div>
+    <div class="stat"><b>20.65×27.5</b><span>Waist envelope / m</span></div>
+  </div>
+
+  <div class="spec">
+    <div class="spec-row"><span>外筒柱</span><span>24 × CFT · Ø2.4→1.4 m</span></div>
+    <div class="spec-row"><span>环梁</span><span>46 层 × 24 段</span></div>
+    <div class="spec-row"><span>斜撑</span><span>540 根 · B-Rep</span></div>
+    <div class="spec-row"><span>核心筒</span><span>17 × 14 m · 壁厚 1.0→0.4 m</span></div>
+    <div class="spec-row"><span>功能层</span><span>37 层 · 5 个功能区</span></div>
+    <div class="spec-row"><span>精确实体</span><span>1,899 solids / 9 components</span></div>
+  </div>
+
+  <div class="note"><b>精度声明</b> 几何为 1:1 mm 参数化 B-Rep；Web GLB 为 30 mm LOD 渲染派生。B 类构件尺寸为工程假设，完整来源与风险见参数表。</div>
+</aside>
+
+<aside class="panel controls" aria-label="视图控制">
+  <div class="control-title">VIEW / 视角</div>
+  <div class="view-grid">
+    <button class="view-btn is-active" data-view="full">全景 <small>OVERVIEW</small></button>
+    <button class="view-btn" data-view="waist">塔腰 <small>WAIST</small></button>
+    <button class="view-btn" data-view="crown">塔冠 <small>CROWN</small></button>
+    <button class="view-btn" data-view="antenna">天线 <small>ANTENNA</small></button>
+    <button class="view-btn" data-view="base">基座 <small>PODIUM</small></button>
+    <button class="view-btn" id="reset">重置 <small>RESET · R</small></button>
+  </div>
+
+  <div class="control-title">LAYERS / 图层</div>
+  <div class="layer-list">
+    <button class="layer" data-layer="lattice"><span class="dot"></span>外筒网格 <span class="state">ON</span></button>
+    <button class="layer" data-layer="core"><span class="dot"></span>核心筒 <span class="state">ON</span></button>
+    <button class="layer" data-layer="floors"><span class="dot"></span>楼板 <span class="state">ON</span></button>
+    <button class="layer" data-layer="crown"><span class="dot"></span>观景环 <span class="state">ON</span></button>
+    <button class="layer" data-layer="antenna"><span class="dot"></span>天线桅杆 <span class="state">ON</span></button>
+    <button class="layer" data-layer="podium"><span class="dot"></span>基座 <span class="state">ON</span></button>
+  </div>
+
+  <div class="switch-row">
+    <span>自动旋转</span>
+    <button id="autorotate" class="switch on" aria-pressed="true" aria-label="自动旋转"></button>
+  </div>
+
+  <div class="section-wrap" id="section-wrap">
+    <div class="section-head">
+      <span class="section-name">剖切 / SECTION</span>
+      <button id="section-toggle" class="switch" aria-pressed="false" aria-label="剖切"></button>
+    </div>
+    <input id="section-range" class="section-slider" type="range" min="-30" max="30" step="1" value="0" />
+    <div class="section-value" id="section-value">+0 m · X normal</div>
+    <div class="section-note">开启后沿 X 轴剖切，查看核心筒、楼板与外筒的连接关系。</div>
+  </div>
+
+  <div class="keyhint"><b>R</b> 重置 · <b>X</b> 剖切 · <b>SPACE</b> 旋转<br />拖拽旋转 · 滚轮缩放 · 右键平移</div>
+</aside>
+
+<div class="hint">CANTON TOWER / PARAMETRIC CAD STUDY / 2026</div>
+<a class="report-link" href="reports/validation_report.md">VALIDATION REPORT ↗</a>
+
+<div id="loading">
+  <div class="load-card">
+    <div class="load-ring"></div>
+    <div class="load-kicker">ASSEMBLING B-REP / 1,899 SOLIDS</div>
+    <div class="load-title">正在装配广州塔</div>
+    <p>24 根 CFT 柱 · 46 道环梁 · 540 根斜撑<br />STEP 精确几何 → GLB 网格化</p>
+    <div class="load-bar"><i></i></div>
+  </div>
+</div>
+
+
+<script>
+/* dev: see bundle.js */
+</script>
+<script src="bundle.js"></script>
+</body>
+</html>

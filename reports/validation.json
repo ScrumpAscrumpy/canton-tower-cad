@@ -1,0 +1,431 @@
+{
+  "generated_at": "2026-11-04T22:07:42+0800",
+  "inputs": {
+    "step": "/Users/scrumpy/Documents/deepseek-harness/default-workspace/canton-tower-cad/out/canton_tower.step",
+    "glb_reference": "/Users/scrumpy/Documents/deepseek-harness/default-workspace/canton-tower-cad/out/canton_tower.glb",
+    "glb_web": "/Users/scrumpy/Documents/deepseek-harness/default-workspace/canton-tower-cad/out/canton_tower_web.glb"
+  },
+  "key_dimensions": {
+    "total_height_mm": 600000.0,
+    "main_body_top_mm": 454000.0,
+    "antenna_length_mm": 146000.0,
+    "base_centerline_oval_mm": [
+      60000.0,
+      80000.0
+    ],
+    "waist_centerline_oval_mm": [
+      20650.0,
+      27500.0
+    ],
+    "waist_outer_oval_mm": [
+      22250.0,
+      29100.0
+    ],
+    "top_centerline_oval_mm": [
+      40500.0,
+      54000.0
+    ],
+    "top_outer_oval_mm": [
+      41900.0,
+      55400.0
+    ],
+    "twist_deg": -45.0,
+    "core_outer_mm": [
+      17000.0,
+      14000.0
+    ],
+    "core_wall_mm": [
+      1000.0,
+      400.0
+    ],
+    "min_wall_mm_modelled": 50.0,
+    "antenna_access_holes": [
+      {
+        "z_mm": 470000.0,
+        "side": "-Y",
+        "diameter_mm": 700.0
+      },
+      {
+        "z_mm": 500000.0,
+        "side": "-Y",
+        "diameter_mm": 700.0
+      },
+      {
+        "z_mm": 540000.0,
+        "side": "-Y",
+        "diameter_mm": 700.0
+      },
+      {
+        "z_mm": 570000.0,
+        "side": "-Y",
+        "diameter_mm": 700.0
+      }
+    ],
+    "ring_inclination_documented_deg": 15.5,
+    "ring_inclination_applied": false
+  },
+  "step_roundtrip": {
+    "solids": 1899,
+    "invalid_solids": 0,
+    "invalid_indices": [],
+    "shells": 1924,
+    "closed_shells": 1924,
+    "volume_m3": 36764.45352217369,
+    "bbox_m": {
+      "xmin": -33.0000000001,
+      "xmax": 33.0000000001,
+      "ymin": -43.000000000100016,
+      "ymax": 43.00000000010002,
+      "zmin": -9.999999999999999e-11,
+      "zmax": 600.0,
+      "xlen": 66.0000000002,
+      "ylen": 86.00000000020003,
+      "zlen": 600.0000000001
+    },
+    "read_seconds": 20.893781185150146
+  },
+  "comparison": {
+    "original_volume_m3": 36764.453522173426,
+    "step_volume_m3": 36764.45352217369,
+    "step_volume_delta_pct": 7.124666600922684e-13,
+    "original_bbox_mm": {
+      "xmin": -33000.0000001,
+      "xmax": 33000.0000001,
+      "ymin": -43000.000000100816,
+      "ymax": 43000.00000010002,
+      "zmin": -1e-07,
+      "zmax": 600000.0,
+      "xlen": 66000.0000002,
+      "ylen": 86000.00000020085,
+      "zlen": 600000.0000001
+    },
+    "step_bbox_m": {
+      "xmin": -33.0000000001,
+      "xmax": 33.0000000001,
+      "ymin": -43.000000000100016,
+      "ymax": 43.00000000010002,
+      "zmin": -9.999999999999999e-11,
+      "zmax": 600.0,
+      "xlen": 66.0000000002,
+      "ylen": 86.00000000020003,
+      "zlen": 600.0000000001
+    }
+  },
+  "glb_reference": {
+    "path": "canton_tower.glb",
+    "bytes": 31743636,
+    "bbox_m": {
+      "xmin": -32.999996185302734,
+      "xmax": 32.999916076660156,
+      "ymin": 0.0,
+      "ymax": 600.0,
+      "zmin": -43.0,
+      "zmax": 42.9998893737793
+    },
+    "groups": {
+      "Podium": {
+        "vertices": 18099,
+        "triangles": 36194,
+        "watertight_after_merge": true,
+        "volume_m3": 4454.351168125273
+      },
+      "ConcreteCore": {
+        "vertices": 200457,
+        "triangles": 400906,
+        "watertight_after_merge": true,
+        "volume_m3": 14945.570276471466
+      },
+      "FloorSlabs": {
+        "vertices": 25524,
+        "triangles": 51048,
+        "watertight_after_merge": true,
+        "volume_m3": 10354.068899630034
+      },
+      "CFTColumns": {
+        "vertices": 141312,
+        "triangles": 282432,
+        "watertight_after_merge": true,
+        "volume_m3": 3013.1223403621166
+      },
+      "RingBeams": {
+        "vertices": 139104,
+        "triangles": 273792,
+        "watertight_after_merge": true,
+        "volume_m3": 1928.965266473977
+      },
+      "DiagonalBraces": {
+        "vertices": 68040,
+        "triangles": 133920,
+        "watertight_after_merge": true,
+        "volume_m3": 1105.5992986989586
+      },
+      "ConnectionGirders": {
+        "vertices": 256,
+        "triangles": 384,
+        "watertight_after_merge": true,
+        "volume_m3": 230.22199227790634
+      },
+      "ObservationDeck": {
+        "vertices": 131655,
+        "triangles": 263310,
+        "watertight_after_merge": true,
+        "volume_m3": 552.489929927469
+      },
+      "AntennaMast": {
+        "vertices": 22595,
+        "triangles": 45658,
+        "watertight_after_merge": false,
+        "volume_m3": null
+      }
+    },
+    "deviation_samples": [
+      {
+        "group": "Podium",
+        "n": 25,
+        "max_mm": 3.9997981439096972,
+        "mean_mm": 1.8029923725626775,
+        "p95_mm": 3.9934718277719687
+      },
+      {
+        "group": "ConcreteCore",
+        "n": 25,
+        "max_mm": 3.8867163027860285,
+        "mean_mm": 1.629419577999958,
+        "p95_mm": 3.163020025896963
+      },
+      {
+        "group": "FloorSlabs",
+        "n": 25,
+        "max_mm": 2.2202342584152315,
+        "mean_mm": 0.8885927992800142,
+        "p95_mm": 2.2155329397724723
+      },
+      {
+        "group": "CFTColumns",
+        "n": 25,
+        "max_mm": 1.2536980909143276,
+        "mean_mm": 0.8853538749763572,
+        "p95_mm": 1.2420112009139272
+      },
+      {
+        "group": "RingBeams",
+        "n": 25,
+        "max_mm": 0.3637870371085882,
+        "mean_mm": 0.26934567799417974,
+        "p95_mm": 0.3564439149832849
+      },
+      {
+        "group": "DiagonalBraces",
+        "n": 25,
+        "max_mm": 0.26645614727285427,
+        "mean_mm": 0.12837123739189443,
+        "p95_mm": 0.2658311261371992
+      },
+      {
+        "group": "ConnectionGirders",
+        "n": 25,
+        "max_mm": 0.01220703125,
+        "mean_mm": 0.0016514702052708846,
+        "p95_mm": 0.01220703125
+      },
+      {
+        "group": "ObservationDeck",
+        "n": 25,
+        "max_mm": 1.3594587316154545,
+        "mean_mm": 0.5788803367055443,
+        "p95_mm": 1.1323375124542112
+      },
+      {
+        "group": "AntennaMast",
+        "n": 25,
+        "max_mm": 1.9709396068471274,
+        "mean_mm": 0.12070635525519294,
+        "p95_mm": 0.23247074854844274
+      }
+    ],
+    "max_sampled_deviation_mm": 3.9997981439096972
+  },
+  "glb_web": {
+    "path": "canton_tower_web.glb",
+    "bytes": 9142332,
+    "bbox_m": {
+      "xmin": -33.0,
+      "xmax": 32.99077606201172,
+      "ymin": 0.0,
+      "ymax": 600.0,
+      "zmin": -43.0,
+      "zmax": 42.99374008178711
+    },
+    "groups": {
+      "Podium": {
+        "vertices": 938,
+        "triangles": 1872,
+        "watertight_after_merge": true,
+        "volume_m3": 4451.898593337838
+      },
+      "ConcreteCore": {
+        "vertices": 208,
+        "triangles": 408,
+        "watertight_after_merge": true,
+        "volume_m3": 14895.804939576852
+      },
+      "FloorSlabs": {
+        "vertices": 10488,
+        "triangles": 20976,
+        "watertight_after_merge": true,
+        "volume_m3": 10349.091036727
+      },
+      "CFTColumns": {
+        "vertices": 61928,
+        "triangles": 123664,
+        "watertight_after_merge": true,
+        "volume_m3": 2992.824691745029
+      },
+      "RingBeams": {
+        "vertices": 59616,
+        "triangles": 119232,
+        "watertight_after_merge": false,
+        "volume_m3": null
+      },
+      "DiagonalBraces": {
+        "vertices": 30240,
+        "triangles": 58320,
+        "watertight_after_merge": true,
+        "volume_m3": 1098.1634845497886
+      },
+      "ConnectionGirders": {
+        "vertices": 256,
+        "triangles": 384,
+        "watertight_after_merge": true,
+        "volume_m3": 230.22199227790634
+      },
+      "ObservationDeck": {
+        "vertices": 18482,
+        "triangles": 36964,
+        "watertight_after_merge": true,
+        "volume_m3": 552.0816025955017
+      },
+      "AntennaMast": {
+        "vertices": 8970,
+        "triangles": 17928,
+        "watertight_after_merge": false,
+        "volume_m3": null
+      }
+    },
+    "deviation_samples": [
+      {
+        "group": "Podium",
+        "n": 25,
+        "max_mm": 20.79322667659371,
+        "mean_mm": 13.113093541627512,
+        "p95_mm": 19.22033301856529
+      },
+      {
+        "group": "ConcreteCore",
+        "n": 25,
+        "max_mm": 13.33498934692432,
+        "mean_mm": 5.6803389470368835,
+        "p95_mm": 12.819221433904127
+      },
+      {
+        "group": "FloorSlabs",
+        "n": 25,
+        "max_mm": 13.263824489114825,
+        "mean_mm": 5.800061515435873,
+        "p95_mm": 13.228862449872134
+      },
+      {
+        "group": "CFTColumns",
+        "n": 25,
+        "max_mm": 6.511356641194691,
+        "mean_mm": 4.974977021351726,
+        "p95_mm": 6.222986499314746
+      },
+      {
+        "group": "RingBeams",
+        "n": 25,
+        "max_mm": 1.7921881151644827,
+        "mean_mm": 0.6435183416668192,
+        "p95_mm": 1.7890836104649797
+      },
+      {
+        "group": "DiagonalBraces",
+        "n": 25,
+        "max_mm": 1.341461801197399,
+        "mean_mm": 0.698502823743572,
+        "p95_mm": 1.3412208914455253
+      },
+      {
+        "group": "ConnectionGirders",
+        "n": 25,
+        "max_mm": 0.01220703125,
+        "mean_mm": 0.002719215005904962,
+        "p95_mm": 0.01220703125
+      },
+      {
+        "group": "ObservationDeck",
+        "n": 25,
+        "max_mm": 13.243757065498281,
+        "mean_mm": 4.002263323925976,
+        "p95_mm": 11.612623090416744
+      },
+      {
+        "group": "AntennaMast",
+        "n": 25,
+        "max_mm": 6.704775235792937,
+        "mean_mm": 0.45421835840368346,
+        "p95_mm": 0.6147519203295322
+      }
+    ],
+    "max_sampled_deviation_mm": 20.79322667659371
+  },
+  "checks": [
+    {
+      "name": "STEP re-read",
+      "pass": true,
+      "detail": "1899 / 1899 solids"
+    },
+    {
+      "name": "STEP topology",
+      "pass": true,
+      "detail": "0 invalid solids"
+    },
+    {
+      "name": "Closed shells",
+      "pass": true,
+      "detail": "1924 / 1924 shells closed"
+    },
+    {
+      "name": "Volume > 0",
+      "pass": true,
+      "detail": "36764.5 m3"
+    },
+    {
+      "name": "STEP volume round-trip < 0.1%",
+      "pass": true,
+      "detail": "0.000000%"
+    },
+    {
+      "name": "Reference GLB deviation <= 5 mm",
+      "pass": true,
+      "detail": "4.000 mm (sampled)"
+    },
+    {
+      "name": "Web GLB deviation <= 30 mm",
+      "pass": true,
+      "detail": "20.793 mm (sampled)"
+    },
+    {
+      "name": "GLB group count",
+      "pass": true,
+      "detail": "9 / 9 / 9"
+    },
+    {
+      "name": "GLB triangle count > 0",
+      "pass": true,
+      "detail": "1487644 ref / 379748 web"
+    }
+  ],
+  "all_pass": true,
+  "runtime_s": 61.39475607872009
+}

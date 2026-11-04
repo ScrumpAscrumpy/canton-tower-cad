@@ -1,0 +1,22 @@
+# Local heavy CAD outputs (exact STEP / reference GLBs are rebuilt by the scripts,
+# or attached to a GitHub Release)
+out/
+canton-tower.html
+广州塔.html
+广州塔-预览.png
+
+# Python
+__pycache__/
+*.pyc
+.venv-cad/
+*.egg-info/
+
+# Node
+web-build/node_modules/
+web/node_modules
+web/node_modules/
+.npm-cache/
+
+# Browser / OS caches
+.chrome*/
+.DS_Store

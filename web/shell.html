@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+<title>广州塔 · Canton Tower — 参数化 B-Rep 精确模型</title>
+<meta name="description" content="广州塔 600 m 参数化 B-Rep 模型：STEP AP214、GLB 网格化、Three.js 交互查看器。24 根 CFT 柱、46 道环梁、37 层楼板、45° 扭转。" />
+<style>
+__CSS__
+</style>
+</head>
+<body>
+<div id="stage" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark" aria-hidden="true"></div>
+    <div class="brand-name">
+      <b>广州塔 · CANTON TOWER</b>
+      <span>PARAMETRIC B-REP / GEOMETRY STUDY</span>
+    </div>
+  </div>
+  <div class="topbadges">
+    <div class="badge">STEP <b>AP214</b> · mm</div>
+    <div class="badge">B-REP <b>1,899</b> SOLIDS</div>
+    <div class="badge">WEB LOD <b>30 mm</b> / 0.45 rad</div>
+  </div>
+</header>
+
+<aside class="panel dossier" aria-label="项目数据">
+  <div class="eyebrow">Guangzhou · Haizhu · 23.106°N 113.324°E</div>
+  <h1 class="title-cn">小蛮腰</h1>
+  <div class="title-en">CANTON TOWER / 广州塔</div>
+  <p class="lede">由两个相对旋转 45° 的椭圆定义的广义双曲面。24 根钢管混凝土柱、46 道环梁与交替斜撑编织出 600 m 的扭转网格。</p>
+
+  <div class="hero-height"><b>600</b><span>m / TOTAL HEIGHT</span></div>
+  <div class="hero-sub">主塔体 454 m + 天线桅杆 146 m</div>
+
+  <div class="stat-grid">
+    <div class="stat"><b>454 <small style="font-size:10px;color:#7f97a8">m</small></b><span>Main body</span></div>
+    <div class="stat"><b>146 <small style="font-size:10px;color:#7f97a8">m</small></b><span>Antenna</span></div>
+    <div class="stat"><b>45°</b><span>Twist / crown vs base</span></div>
+    <div class="stat"><b>20.65×27.5</b><span>Waist envelope / m</span></div>
+  </div>
+
+  <div class="spec">
+    <div class="spec-row"><span>外筒柱</span><span>24 × CFT · Ø2.4→1.4 m</span></div>
+    <div class="spec-row"><span>环梁</span><span>46 层 × 24 段</span></div>
+    <div class="spec-row"><span>斜撑</span><span>540 根 · B-Rep</span></div>
+    <div class="spec-row"><span>核心筒</span><span>17 × 14 m · 壁厚 1.0→0.4 m</span></div>
+    <div class="spec-row"><span>功能层</span><span>37 层 · 5 个功能区</span></div>
+    <div class="spec-row"><span>精确实体</span><span>1,899 solids / 9 components</span></div>
+  </div>
+
+  <div class="note"><b>精度声明</b> 几何为 1:1 mm 参数化 B-Rep；Web GLB 为 30 mm LOD 渲染派生。B 类构件尺寸为工程假设，完整来源与风险见参数表。</div>
+</aside>
+
+<aside class="panel controls" aria-label="视图控制">
+  <div class="control-title">VIEW / 视角</div>
+  <div class="view-grid">
+    <button class="view-btn is-active" data-view="full">全景 <small>OVERVIEW</small></button>
+    <button class="view-btn" data-view="waist">塔腰 <small>WAIST</small></button>
+    <button class="view-btn" data-view="crown">塔冠 <small>CROWN</small></button>
+    <button class="view-btn" data-view="antenna">天线 <small>ANTENNA</small></button>
+    <button class="view-btn" data-view="base">基座 <small>PODIUM</small></button>
+    <button class="view-btn" id="reset">重置 <small>RESET · R</small></button>
+  </div>
+
+  <div class="control-title">LAYERS / 图层</div>
+  <div class="layer-list">
+    <button class="layer" data-layer="lattice"><span class="dot"></span>外筒网格 <span class="state">ON</span></button>
+    <button class="layer" data-layer="core"><span class="dot"></span>核心筒 <span class="state">ON</span></button>
+    <button class="layer" data-layer="floors"><span class="dot"></span>楼板 <span class="state">ON</span></button>
+    <button class="layer" data-layer="crown"><span class="dot"></span>观景环 <span class="state">ON</span></button>
+    <button class="layer" data-layer="antenna"><span class="dot"></span>天线桅杆 <span class="state">ON</span></button>
+    <button class="layer" data-layer="podium"><span class="dot"></span>基座 <span class="state">ON</span></button>
+  </div>
+
+  <div class="switch-row">
+    <span>自动旋转</span>
+    <button id="autorotate" class="switch on" aria-pressed="true" aria-label="自动旋转"></button>
+  </div>
+
+  <div class="section-wrap" id="section-wrap">
+    <div class="section-head">
+      <span class="section-name">剖切 / SECTION</span>
+      <button id="section-toggle" class="switch" aria-pressed="false" aria-label="剖切"></button>
+    </div>
+    <input id="section-range" class="section-slider" type="range" min="-30" max="30" step="1" value="0" />
+    <div class="section-value" id="section-value">+0 m · X normal</div>
+    <div class="section-note">开启后沿 X 轴剖切，查看核心筒、楼板与外筒的连接关系。</div>
+  </div>
+
+  <div class="keyhint"><b>R</b> 重置 · <b>X</b> 剖切 · <b>SPACE</b> 旋转<br />拖拽旋转 · 滚轮缩放 · 右键平移</div>
+</aside>
+
+<div class="hint">CANTON TOWER / PARAMETRIC CAD STUDY / 2026</div>
+<a class="report-link" href="__REPORT_LINK__">VALIDATION REPORT ↗</a>
+
+<div id="loading">
+  <div class="load-card">
+    <div class="load-ring"></div>
+    <div class="load-kicker">ASSEMBLING B-REP / 1,899 SOLIDS</div>
+    <div class="load-title">正在装配广州塔</div>
+    <p>24 根 CFT 柱 · 46 道环梁 · 540 根斜撑<br />STEP 精确几何 → GLB 网格化</p>
+    <div class="load-bar"><i></i></div>
+  </div>
+</div>
+
+<script id="glb-b64" type="text/plain">__GLB_BASE64__</script>
+<script>
+__BUNDLE__
+</script>
+</body>
+</html>

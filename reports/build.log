@@ -1,0 +1,52 @@
+[22:01:35] Canton Tower build start
+[22:01:35] ring stations: 46  z=[1000, 453500] mm
+[22:01:35] podium: elliptical terrace
+[22:01:35]   group Podium: 1 solids, 4454.7 m3, 11137 t
+[22:01:35] core: outer loft / inner cavity cut
+[22:01:36]   group ConcreteCore: 1 solids, 14949.8 m3, 37374 t
+[22:01:36] floors: 37 annular slabs
+[22:01:41]   group FloorSlabs: 37 solids, 10354.9 m3, 25887 t
+[22:01:41] columns: 24 hollow CFT ruled lofts, 46 stations each
+[22:01:47]   columns 6/24  (0.92s last)
+[22:01:52]   columns 12/24  (0.91s last)
+[22:01:58]   columns 18/24  (0.94s last)
+[22:02:03]   columns 24/24  (0.94s last)
+[22:02:05]   group CFTColumns: 24 solids, 3018.0 m3, 23691 t
+[22:02:05] rings: 46 levels x 24 straight beam segments
+[22:02:05]   ring segments built: 1104
+[22:02:06]   group RingBeams: 1104 solids, 1932.2 m3, 15168 t
+[22:02:06] braces: alternating diagonal tubes
+[22:02:06]   braces built: 540
+[22:02:06]   group DiagonalBraces: 540 solids, 1107.4 m3, 8693 t
+[22:02:06] connection girders: 4 levels x 8 radial box girders
+[22:02:06]   group ConnectionGirders: 32 solids, 230.2 m3, 1807 t
+[22:02:06] observation deck: annular slab and railing
+[22:02:06]   group ObservationDeck: 2 solids, 552.6 m3, 1381 t
+[22:02:06] antenna: octagonal loft, shell, flanges, holes, tip
+[22:02:09]   NOTE: OCCT shell(-120.0) failed on the tapered octagonal loft (ValueError: Null TopoDS_Shape object); exact inner-loft boolean fallback used
+[22:02:10]   group AntennaMast: 158 solids, 164.7 m3, 1293 t
+[22:02:10] TOTAL: 1899 solids, 36764.5 m3, 126432 t, bbox {'xmin': -33000.0000001, 'xmax': 33000.0000001, 'ymin': -43000.000000100816, 'ymax': 43000.00000010002, 'zmin': -1e-07, 'zmax': 600000.0, 'xlen': 66000.0000002, 'ylen': 86000.00000020085, 'zlen': 600000.0000001}
+[22:02:10] writing STEP assembly
+[22:02:13] STEP written: /Users/scrumpy/Documents/deepseek-harness/default-workspace/canton-tower-cad/out/canton_tower.step (42.2 MB)
+[22:02:13] meshing reference GLB: linear 5.0 mm, angular 0.2 rad
+[22:02:15]   mesh Podium: 18980 verts, 36194 tris (0.6s)
+[22:02:27]   mesh ConcreteCore: 200970 verts, 400906 tris (12.5s)
+[22:02:29]   mesh FloorSlabs: 51196 verts, 51048 tris (1.6s)
+[22:02:57]   mesh CFTColumns: 291264 verts, 282432 tris (28.2s)
+[22:03:26]   mesh RingBeams: 280416 verts, 273792 tris (29.2s)
+[22:03:40]   mesh DiagonalBraces: 137160 verts, 133920 tris (13.9s)
+[22:03:41]   mesh ConnectionGirders: 768 verts, 384 tris (1.4s)
+[22:03:47]   mesh ObservationDeck: 132859 verts, 263310 tris (5.6s)
+[22:03:53]   mesh AntennaMast: 43481 verts, 45658 tris (5.8s)
+[22:03:53] GLB written: /Users/scrumpy/Documents/deepseek-harness/default-workspace/canton-tower-cad/out/canton_tower.glb (31.7 MB), 1157094 verts / 1487644 tris
+[22:03:53] meshing web GLB: linear 30.0 mm, angular 0.45 rad
+[22:03:53]   mesh Podium: 1300 verts, 1872 tris (0.1s)
+[22:03:53]   mesh ConcreteCore: 420 verts, 408 tris (0.0s)
+[22:03:54]   mesh FloorSlabs: 21124 verts, 20976 tris (1.3s)
+[22:04:23]   mesh CFTColumns: 132496 verts, 123664 tris (29.1s)
+[22:04:52]   mesh RingBeams: 125856 verts, 119232 tris (28.9s)
+[22:05:06]   mesh DiagonalBraces: 61560 verts, 58320 tris (13.5s)
+[22:05:07]   mesh ConnectionGirders: 768 verts, 384 tris (1.4s)
+[22:05:08]   mesh ObservationDeck: 18981 verts, 36964 tris (0.6s)
+[22:05:14]   mesh AntennaMast: 19049 verts, 17928 tris (5.8s)
+[22:05:14] GLB written: /Users/scrumpy/Documents/deepseek-harness/default-workspace/canton-tower-cad/out/canton_tower_web.glb (9.1 MB), 381554 verts / 379748 tris

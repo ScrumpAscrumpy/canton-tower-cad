@@ -1,0 +1,38 @@
+﻿参数名,值,单位,类别,来源类型,来源标识,检索日期,置信度,状态
+total_height,600000,mm,A,standard/official,https://en.wikipedia.org/wiki/Canton_Tower ; HKIE Cover Story 2012,2026-11-04,high,已确认
+main_body_height,454000,mm,A,academic thesis,"Zhang 2015 PolyU thesis, Ch.3; HKIE 2012",2026-11-04,high,已确认
+antenna_length,146000,mm,A,academic thesis,"Zhang 2015 PolyU thesis, p.32",2026-11-04,high,已确认
+functional_floors,37,count,A,official/engineering,HKIE Cover Story 2012,2026-11-04,high,已确认
+cft_columns,24,count,A,academic thesis,"Zhang 2015 PolyU thesis, p.34",2026-11-04,high,已确认
+ring_levels,46,count,A,academic thesis,"Zhang 2015 PolyU thesis, p.34",2026-11-04,high,已确认
+base_oval,60000 x 80000,mm,A,academic thesis,"Zhang 2015 PolyU thesis, p.34 (at -10 m)",2026-11-04,high,已确认
+waist_oval,20650 x 27500,mm,A,academic thesis,"Zhang 2015 PolyU thesis, p.34 (at 280 m)",2026-11-04,high,已确认
+top_oval,40500 x 54000,mm,A,academic thesis,"Zhang 2015 PolyU thesis, p.34 (at 454 m)",2026-11-04,high,已确认
+twist,-45,deg,A,academic thesis,"Zhang 2015 PolyU thesis, p.34",2026-11-04,high,已确认
+core_outer,17000 x 14000,mm,A,academic thesis,"Zhang 2015 PolyU thesis, p.31",2026-11-04,high,已确认
+core_wall,1000 -> 400,mm,A,academic thesis,"Zhang 2015 PolyU thesis, p.31",2026-11-04,high,已确认
+core_long_axis,18 deg west of north,deg,A,academic thesis,"Zhang 2015 PolyU thesis, p.31",2026-11-04,high,已确认
+antenna_octagon,13000 diagonal,mm,A,academic thesis,"Zhang 2015 PolyU thesis, p.32",2026-11-04,high,已确认
+connection_girder_levels,204000/230000/272000/303000,mm,A,academic thesis,"Zhang 2015 PolyU thesis, p.36",2026-11-04,high,已确认
+total_mass,100000,t,A,encyclopedic,Wikipedia Canton Tower (citing public data),2026-11-04,medium,已查证/非建模依据
+ring_inclination,15.5,deg,A,academic thesis,"Zhang 2015 PolyU thesis, p.34",2026-11-04,high,已查证/未施加（缺节点放样表）
+ring_beam_idealisation,46 levels x 24 horizontal straight tubes,count,B,assumption,thesis gives count; joint coordinates not published,2026-11-04,low,待确认
+base_datum_shift,-10 m -> 0 m,m,B,assumption,source base oval at -10 m; shifted to ground datum,2026-11-04,medium,待确认
+step_schema,AP214 / mm,n/a,A,export choice,OpenCASCADE STEPCAFControl_Writer,2026-11-04,high,已确认
+steel_density,7850,kg/m3,A,material standard,GB/T 700 / general steel,2026-11-04,high,已确认
+concrete_density,2500,kg/m3,A,material standard,GB 50010 normal-weight concrete,2026-11-04,high,已确认
+column_diameter_schedule,2400 -> 1600 -> 1400,mm,B,assumption,not published as a schedule,2026-11-04,low,待确认
+column_wall,50,mm,B,assumption,CFT wall thickness not published,2026-11-04,low,待确认
+ring_tube_diameter,640,mm,B,assumption,derived visually,2026-11-04,low,待确认
+brace_diameter,480,mm,B,assumption,derived visually,2026-11-04,low,待确认
+floor_thickness,200,mm,B,assumption,composite deck assumed,2026-11-04,low,待确认
+floor_levels,5 zones / 37 levels,mm,B,assumption,only counts and zone ranges published,2026-11-04,low,待确认
+core_eccentricity,"1200, -800",mm,B,assumption,"thesis states centroids differ, value not published",2026-11-04,low,待确认
+podium,66000 x 86000 x 1000,mm,B,assumption,architectural base terrace,2026-11-04,low,待确认
+observation_deck,44000 x 58000 x 900,mm,B,assumption,roof deck envelope,2026-11-04,low,待确认
+antenna_radius_schedule,6500 -> 500,mm,B,assumption,linear schedule between documented ends,2026-11-04,low,待确认
+mesh_linear_tol,5,mm,A,meshing choice,architectural LOD; 0.05 mm not tractable at 600 m,2026-11-04,high,已确认
+mesh_angular_tol,0.2,rad,A,meshing choice,OCCT BRepMesh,2026-11-04,high,已确认
+mesh_web_linear_tol,30,mm,A,meshing choice,web LOD; 3 cm at 600 m scale,2026-11-04,high,已确认
+mesh_web_angular_tol,0.45,rad,A,meshing choice,web LOD angular tolerance,2026-11-04,high,已确认
+antenna_hybrid,120 mm shell + 8 corner tubes + X bracing,n/a,B,assumption,"thesis describes an octagonal spatial frame, not a plate shell",2026-11-04,low,待确认
